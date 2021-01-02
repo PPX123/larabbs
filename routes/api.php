@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\VerificationCodesController;
 use App\Http\Middleware\AcceptHeader;
 use Illuminate\Support\Facades\Route;
 
@@ -14,5 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('v1')->name('api-v1')->middleware([AcceptHeader::class])->group(function () {
-});
+Route::prefix('v1')
+    ->namespace('Api/V1')
+    ->name('api.v1.')
+    ->middleware([AcceptHeader::class])
+    ->group(function () {
+        Route::post('verificationCodes', [VerificationCodesController::class, 'store'])->name('verificationCodes.store');
+    });
