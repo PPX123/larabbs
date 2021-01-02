@@ -64,6 +64,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     use Notifiable {
         notify as protected laravelNotify;
     }
+
     public function notify($instance)
     {
         // 如果要通知的人是当前用户，就不必通知了！
@@ -80,11 +81,8 @@ class User extends Authenticatable implements MustVerifyEmailContract
     }
 
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'introduction',
-        'avatar',
+        'name', 'phone', 'email', 'password', 'introduction', 'avatar',
+        'weixin_openid', 'weixin_unionid'
     ];
 
     protected $hidden = [
@@ -133,7 +131,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function setAvatarAttribute($path)
     {
         // 如果不是 `http` 子串开头，那就是从后台上传的，需要补全 URL
-        if ( ! \Str::startsWith($path, 'http')) {
+        if (!\Str::startsWith($path, 'http')) {
 
             // 拼接完整的 URL
             $path = config('app.url') . "/uploads/images/avatars/$path";
