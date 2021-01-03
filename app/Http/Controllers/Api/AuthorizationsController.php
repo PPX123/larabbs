@@ -2,15 +2,32 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\AuthorizationRequest;
 use App\Models\User;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Overtrue\Socialite\AccessToken;
 use Illuminate\Auth\AuthenticationException;
 use App\Http\Requests\Api\SocialAuthorizationRequest;
 
 class AuthorizationsController extends Controller
 {
+    public function store(AuthorizationRequest $request)
+    {
+        $username = $request->username;
+
+        filter_var($username, FILTER_VALIDATE_EMAIL) ?
+            $credentials['email'] = $username :
+            $credentials['phone'] = $username;
+
+        $credentials['password'] = $request->password;
+
+        if (!$token = \Auth::guard('api')->attempt($credentials)) {
+            throw new AuthenticationException('用户名或密码错误');
+        }
+
+        return $this->respondWithToken($token)->setStatusCode(201);
+    }
+
     public function socialStore($type, SocialAuthorizationRequest $request)
     {
         $driver = \Socialite::driver($type);
@@ -30,7 +47,7 @@ class AuthorizationsController extends Controller
 
             $oauthUser = $driver->user($accessToken);
         } catch (\Exception $e) {
-            throw new AuthenticationException();
+            throw new AuthenticationException('参数错误，未获取用户信息');
         }
 
         switch ($type) {
@@ -56,6 +73,29 @@ class AuthorizationsController extends Controller
                 break;
         }
 
-        return response()->json(['token' => $user->id]);
+        $token = auth('api')->login($user);
+
+        return $this->respondWithToken($token)->setStatusCode(201);
+    }
+
+    public function update(): JsonResponse
+    {
+        $token = auth('api')->refresh();
+        return $this->respondWithToken($token);
+    }
+
+    public function destroy()
+    {
+        auth('api')->logout();
+        return response(null, 204);
+    }
+
+    protected function respondWithToken($token): JsonResponse
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60
+        ]);
     }
 }
