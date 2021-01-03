@@ -81,6 +81,8 @@ Route::prefix('v1')
                     // 发布回复
                     Route::post('topics/{topic}/replies', [RepliesController::class, 'store'])
                         ->name('topics.replies.store');
+                    Route::delete('topics/{topic}/replies/{reply}', [RepliesController::class, 'destroy'])
+                        ->name('topics.replies.destroy');
                 });
             });
     });
