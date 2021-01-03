@@ -53,6 +53,10 @@ Route::prefix('v1')
                 // 分类列表
                 Route::get('categories', [CategoriesController::class, 'index'])
                     ->name('categories.index');
+                // 话题列表，详情
+                Route::resource('topics', 'TopicsController')->only([
+                    'index', 'show'
+                ]);
 
                 // 登录后可以访问的接口
                 Route::middleware('auth:api')->group(function () {
@@ -65,6 +69,10 @@ Route::prefix('v1')
                     // 上传图片
                     Route::post('images', [ImagesController::class, 'store'])
                         ->name('images.store');
+                    // 发布话题
+                    Route::resource('topics', 'TopicsController')->only([
+                        'store', 'update', 'destroy'
+                    ]);
                 });
             });
     });
