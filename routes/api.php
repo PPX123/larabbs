@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthorizationsController;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\ImagesController;
+use App\Http\Controllers\Api\TopicsController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\VerificationCodesController;
 use App\Http\Middleware\AcceptHeader;
@@ -57,6 +58,9 @@ Route::prefix('v1')
                 Route::resource('topics', 'TopicsController')->only([
                     'index', 'show'
                 ]);
+                // 某个用户发布的话题
+                Route::get('users/{user}/topics', [TopicsController::class, 'userIndex'])
+                    ->name('users.topics.index');
 
                 // 登录后可以访问的接口
                 Route::middleware('auth:api')->group(function () {
