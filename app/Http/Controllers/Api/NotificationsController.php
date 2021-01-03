@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
+class NotificationsController extends Controller
+{
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        $notifications = $request->user()->notifications()->paginate();
+
+        return NotificationResource::collection($notifications);
+    }
+}
