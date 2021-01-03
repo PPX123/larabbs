@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthorizationsController;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\ImagesController;
+use App\Http\Controllers\Api\NotificationsController;
 use App\Http\Controllers\Api\RepliesController;
 use App\Http\Controllers\Api\TopicsController;
 use App\Http\Controllers\Api\UsersController;
@@ -91,8 +92,11 @@ Route::prefix('v1')
                     Route::delete('topics/{topic}/replies/{reply}', [RepliesController::class, 'destroy'])
                         ->name('topics.replies.destroy');
                     // 通知列表
-                    Route::get('notifications', 'NotificationsController@index')
+                    Route::get('notifications', [NotificationsController::class, 'index'])
                         ->name('notifications.index');
+                    // 通知统计
+                    Route::get('notifications/stats', [NotificationsController::class, 'stats'])
+                        ->name('notifications.stats');
                 });
             });
     });
