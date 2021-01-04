@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Auth;
 use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * App\Models\User
@@ -62,7 +61,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereWeixinOpenid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereWeixinUnionid($value)
  */
-class User extends Authenticatable implements MustVerifyEmailContract, JWTSubject
+class User extends Authenticatable implements MustVerifyEmailContract
 {
     use Traits\ActiveUserHelper;
     use Traits\LastActivedAtHelper;
@@ -154,15 +153,5 @@ class User extends Authenticatable implements MustVerifyEmailContract, JWTSubjec
         }
 
         $this->attributes['avatar'] = $path;
-    }
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims(): array
-    {
-        return [];
     }
 }
