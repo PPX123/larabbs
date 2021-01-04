@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthorizationsController;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\ImagesController;
+use App\Http\Controllers\Api\LinksController;
 use App\Http\Controllers\Api\NotificationsController;
 use App\Http\Controllers\Api\RepliesController;
 use App\Http\Controllers\Api\TopicsController;
@@ -69,6 +70,9 @@ Route::prefix('v1')
                 // 某个用户的回复列表
                 Route::get('users/{user}/replies', [RepliesController::class, 'userIndex'])
                     ->name('users.replies.index');
+                // 资源推荐
+                Route::get('links', [LinksController::class, 'index'])
+                    ->name('links.index');
 
                 // 登录后可以访问的接口
                 Route::middleware('auth:api')->group(function () {
