@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\Api\AuthorizationRequest;
 use App\Models\User;
+use App\Traits\PassportToken;
 use Illuminate\Http\JsonResponse;
 use Overtrue\Socialite\AccessToken;
 use Illuminate\Auth\AuthenticationException;
@@ -15,6 +16,8 @@ use Nyholm\Psr7\Response as Psr7Response;
 
 class AuthorizationsController extends Controller
 {
+    use PassportToken;
+
     public function store(AuthorizationRequest $originRequest, AuthorizationServer $server, ServerRequestInterface $serverRequest)
     {
         try {
@@ -69,9 +72,9 @@ class AuthorizationsController extends Controller
                 break;
         }
 
-        $token = auth('api')->login($user);
+        $result = $this->getBearerTokenByUser($user, '1', false);
 
-        return $this->respondWithToken($token)->setStatusCode(201);
+        return response()->json($result)->setStatusCode(201);
     }
 
     public function update(AuthorizationServer $server, ServerRequestInterface $serverRequest)
