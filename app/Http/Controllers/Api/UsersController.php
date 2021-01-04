@@ -8,6 +8,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UsersController extends Controller
 {
@@ -36,5 +37,11 @@ class UsersController extends Controller
         $user->update($attributes);
 
         return (new UserResource($user))->showSensitiveFields();
+    }
+
+    public function activedIndex(User $user): AnonymousResourceCollection
+    {
+        UserResource::wrap('data');
+        return UserResource::collection($user->getActiveUsers());
     }
 }
