@@ -12,14 +12,14 @@
         </div>
 
         <div class="text-secondary" style="font-size:0.9em;">
-          <i class="far fa-clock"></i> 回复于 {{ $reply->created_at->diffForHumans() }}
+          <i class="far fa-clock"></i> Replied {{ $reply->created_at->diffForHumans() }}
         </div>
       </li>
     @endforeach
   </ul>
 
 @else
-  <div class="empty-block">暂无数据 ~_~ </div>
+  <div class="empty-block">No data ~_~ </div>
 @endif
 
 {{-- 分页 --}}

@@ -7,7 +7,7 @@
           {{ $topic->title }}
         </a>
         <span class="meta float-right text-secondary">
-          {{ $topic->reply_count }} 回复
+          {{ $topic->reply_count }} Reply
           <span> ⋅ </span>
           {{ $topic->created_at->diffForHumans() }}
         </span>
@@ -16,7 +16,7 @@
   </ul>
 
 @else
-  <div class="empty-block">暂无数据 ~_~ </div>
+  <div class="empty-block">No data ~_~</div>
 @endif
 
 {{-- 分页 --}}
